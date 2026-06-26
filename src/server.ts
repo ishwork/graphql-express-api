@@ -24,11 +24,20 @@ const schema = buildSchema(`
     user: User
   }
 
+  input CreateUserInput {
+    name: String!
+    email: String!
+  }
+
   type Query {
     users: [User!]!
     books: [Book!]!
     user(id: ID!): User
     book(id: ID!): Book
+  }
+
+  type Mutation {
+    createUser(input: CreateUserInput!): User!
   }
 `);
 
@@ -57,6 +66,20 @@ const root = {
     return {
       ...book,
       user: users.find((user) => user.id === book.userId)
+    };
+  },
+  createUser: ({ input }: { input: { name: string; email: string } }) => {
+    const user = {
+      id: String(users.length + 1),
+      name: input.name,
+      email: input.email
+    };
+
+    users.push(user);
+
+    return {
+      ...user,
+      books: []
     };
   }
 };
