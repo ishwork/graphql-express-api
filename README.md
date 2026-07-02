@@ -87,6 +87,36 @@ You'll see the GraphiQL interface — an in-browser IDE with autocomplete and sy
 }
 ```
 
+### Frontend (`fetch`)
+
+Fetch all users with their books:
+
+```js
+const GET_USERS = `
+  query {
+    users {
+      id
+      name
+      email
+      books {
+        id
+        title
+        author
+      }
+    }
+  }
+`;
+
+const response = await fetch("http://localhost:4000/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query: GET_USERS })
+});
+
+const { data, errors } = await response.json();
+console.log(data.users);
+```
+
 ## Mutations and input types
 
 ### Browser (Ruru)
